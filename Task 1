@@ -1,1 +1,115 @@
+Burp Suite — One‑Page Vulnerability Scan Checklist 
 
+Quick note: Only test systems you are explicitly authorized to test. 
+
+ 
+
+Pre‑test (Top priorities) 
+
+ Written permission / scope confirmed (domains, IPs, time window) 
+
+ Use a dedicated test browser/profile 
+
+ Install Burp Suite and confirm listener: 127.0.0.1:8080 
+
+ Disable VPN/system proxies that interfere 
+
+ 
+
+Setup (2 minutes) 
+
+Start Burp → Proxy → Options → ensure listener 127.0.0.1:8080. 
+
+Browser proxy: set HTTP proxy to 127.0.0.1:8080 (or use Burp’s embedded browser (Pro)). 
+
+Install Burp CA: visit http://burp → download and import CA into test browser. 
+
+ 
+
+Recon / Crawling (10–30 minutes) 
+
+Browse the app manually: login flows, key pages, forms, file upload, APIs. 
+
+Proxy → HTTP history: confirm requests are captured. 
+
+Target → Site map: verify discovered hosts & paths. 
+
+Right‑click host/path → Engagement tools → Crawl/Spider (Pro: more features). 
+
+ 
+
+Passive review (continuous) 
+
+Inspect Proxy → HTTP history for: 
+
+Sensitive data leaks in responses (API keys, stack traces) 
+
+Missing security headers (HSTS, CSP, X-Frame-Options) 
+
+Cookies without Secure/HttpOnly flags 
+
+Note any interesting endpoints to test manually. 
+
+ 
+
+Active scanning (Pro only — only on test/stage) 
+
+Target → Site map → right‑click endpoint → Scan selected. 
+
+Choose scan policy (default OK) → Start. 
+
+Monitor Scanner → Issues and Live tasks. 
+
+If Community edition: rely on manual testing (Repeater/Intruder) and passive checks. 
+
+ 
+
+Manual verification (always) 
+
+Repeater: right‑click request → Send to Repeater → modify params → Send → observe 
+
+Confirm XSS, SQLi, auth bypass, logic flaws 
+
+Intruder (Pro heavy use): setup payload positions → choose payload list → Start attack 
+
+Sequencer: collect session tokens → analyze entropy 
+
+Use Comparer / Decoder for response diffs & encoded data 
+
+ 
+
+Triage & Prioritization 
+
+For each finding record: proof request/response, affected parameter, steps to reproduce. 
+
+Prioritize: High (RCE, SQLi, auth bypass) → Medium (Stored XSS, CSRF on sensitive actions) → Low (info leakage, headers) 
+
+Verify false positives via Repeater before reporting. 
+
+ 
+
+Reporting (one page summary + appendices) 
+
+Include: scope, test date/time, tools used, risky findings with reproduction steps, recommended fix. 
+
+Export (Pro): Scanner → Report → choose format. Community: save HTTP history and build manual report. 
+
+ 
+
+Re‑test & Cleanup 
+
+After fixes: re‑scan or re‑send vulnerable requests via Repeater to confirm. 
+
+Remove Burp CA from persistent browser profiles. 
+
+Restore browser proxy settings. 
+
+Archive logs and export artifacts needed for deliverables. 
+
+ 
+
+Quick safety reminders 
+
+Don’t run noisy brute force on production without explicit permission. 
+
+Keep test credentials and artifacts secure. 
